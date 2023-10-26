@@ -1383,13 +1383,6 @@ class MikrotikCoordinator(DataUpdateCoordinator[None]):
     # ---------------------------
     def get_system_health(self) -> None:
         """Get routerboard data from Mikrotik"""
-        if (
-            "write" not in self.ds["access"]
-            or "policy" not in self.ds["access"]
-            or "reboot" not in self.ds["access"]
-        ):
-            return
-
         if 0 < self.major_fw_version < 7:
             self.ds["health"] = parse_api(
                 data=self.ds["health"],
