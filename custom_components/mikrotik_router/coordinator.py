@@ -1511,9 +1511,15 @@ class MikrotikCoordinator(DataUpdateCoordinator[None]):
     # ---------------------------
     def get_firmware_update(self) -> None:
         """Check for firmware update on Mikrotik"""
-        self.execute(
-            "/system/package/update", "check-for-updates", None, None, {"duration": 10}
-        )
+        if (
+            "write" in self.ds["access"]
+            and "policy" in self.ds["access"]
+            and "reboot" in self.ds["access"]
+        ):
+            self.execute(
+                "/system/package/update", "check-for-updates", None, None, {"duration": 10}
+            )
+
         self.ds["fw-update"] = parse_api(
             data=self.ds["fw-update"],
             source=self.api.query("/system/package/update"),
